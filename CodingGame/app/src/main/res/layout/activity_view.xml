@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.me.myapplication.ViewActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#c1cdcd"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:background="#c1cdcd"
+            android:orientation="vertical"
+            android:padding="2.5dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#c1cdcd"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="데이터를 넣어주세요."
+                    android:textAlignment="center"
+                    android:background="#FFFFFF"></TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:background="#c1cdcd"
+                android:orientation="horizontal"
+                android:paddingTop="2.5dp">
+
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:columnCount="2">
+
+                    <ImageView
+                        android:id="@+id/up"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/up"
+                        android:contentDescription="up" />
+
+                    <ImageView
+                        android:id="@+id/down"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/down"
+                        android:contentDescription="down" />
+
+                    <ImageView
+                        android:id="@+id/left"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/left"
+                        android:contentDescription="left" />
+
+                    <ImageView
+                        android:id="@+id/right"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/right"
+                        android:contentDescription="right" />
+
+                    <ImageView
+                        android:id="@+id/repeat"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/repeat"
+                        android:contentDescription="repeat" />
+
+                    <ImageView
+                        android:id="@+id/collect"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/collect"
+                        android:contentDescription="collect" />
+
+                </GridLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#FFFFFF"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="뒤로" />
+
+                    <Button
+                        android:id="@+id/clear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="취소" />
+
+                    <Button
+                        android:id="@+id/complete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="확인" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:background="#FFFFFF">
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
