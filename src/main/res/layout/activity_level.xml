@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/basicvbtn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/edgecircle"
+        android:scaleType="centerInside"
+        android:src="@drawable/basicv"
+        android:paddingTop="10dp"/>
+
+    <ImageButton
+        android:id="@+id/advancedvbtn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/edgecircle"
+        android:enabled="false"
+        android:scaleType="centerInside"
+        android:src="@drawable/advancedvno"
+        android:paddingTop="10dp"/>
+
+    <ImageButton
+        android:id="@+id/sentencebtn"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/edgecircle"
+        android:enabled="false"
+        android:scaleType="centerInside"
+        android:src="@drawable/sentenceno"
+        android:paddingTop="10dp"/>
+
+</LinearLayout>
