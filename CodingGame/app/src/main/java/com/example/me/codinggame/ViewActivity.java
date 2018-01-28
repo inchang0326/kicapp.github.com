@@ -1,7 +1,9 @@
 package com.example.me.codinggame;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -29,6 +31,10 @@ import java.util.Random;
 import java.util.Stack;
 
 public class ViewActivity extends Activity {
+
+    //AlertDialog 메세지 변수
+    private static final int DIALOG_YES_NO_MESSAGE = 1;
+
     private ImageView m_up, m_down, m_left, m_right, m_repeat;
     private Button m_back, m_clear, m_complete;
     private EditText m_repeatNum;
@@ -513,12 +519,14 @@ public class ViewActivity extends Activity {
                         displayMap();
                         m_isFinished = true;
 
+                        showDialog(DIALOG_YES_NO_MESSAGE);
+
                         // 레벨 업 - 보류
                         // 뒤로가기 시, m_winCnt 데이터가 사라지기 때문에 저장해야됨
                         // 초급영단어, 고급영단어,  초급영문장, 고급영문장의 m_winCnt를 각각 따로 관리 해야됨
                         // 로컬에서 하는 것이므로 LevelActivity에서 각각 관리하고 ViewActivity로 인텐트로 날려주면 될 거 같음
                         if(m_winCnt > 2) {
-                            Toast.makeText(getApplicationContext(), "축하합니다! 다음 level이 열렸어요!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "심화 영단어 단계도 풀어보아요!", Toast.LENGTH_LONG).show();
                             LevelActivity.advancedVButton.setEnabled(true);
                             LevelActivity.advancedVButton.setImageResource(R.drawable.advancedv);
                         }
@@ -535,4 +543,33 @@ public class ViewActivity extends Activity {
             }
         }
     };
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case DIALOG_YES_NO_MESSAGE:
+                //AlertDialog.Builder 클래스는 AlertDialog 생성에 필요한 API를 제공
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+                //AlertDialog의 대화상자를 설정
+                builder.setTitle("축하해요! " + m_voca + "의 뜻을 알아볼까요?")
+                        .setMessage(m_voca + " - " + BasicVoca.valueOf(m_voca).meaningOf())
+                        .setPositiveButton("저장", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {//사용자가 "Yes" 클릭 시
+
+                            }
+                        })
+                        .setNegativeButton("확인", new DialogInterface.OnClickListener() {//사용자가 "No" 클릭 시
+                            @Override
+                            //AlertDialog 해제
+                            public void onClick(DialogInterface dialog, int which) {//사용자가 "No" 클릭 시
+                                dialog.dismiss();//AlertDialog 해제
+                            }
+                        });
+                //AlertDialog 객체 생성
+                android.app.AlertDialog alert = builder.create();
+                return alert;
+        }
+        return null;
+    }
 }
