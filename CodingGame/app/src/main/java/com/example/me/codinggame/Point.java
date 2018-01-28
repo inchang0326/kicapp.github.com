@@ -1,9 +1,5 @@
 package com.example.me.codinggame;
 
-/**
- * Created by Me on 2018-01-21.
- */
-
 public class Point {
     private int m_row;
     private int m_col;
