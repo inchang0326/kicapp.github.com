@@ -1,8 +1,4 @@
-package com.example.me.myapplication;
-
-/**
- * Created by Me on 2018-01-21.
- */
+package com.example.me.codinggame;
 
 public class Point {
     private int m_row;

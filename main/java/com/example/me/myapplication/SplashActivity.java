@@ -1,4 +1,4 @@
-package com.example.me.myapplication;
+package com.example.me.codinggame;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,7 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         Handler hd = new Handler();
-        hd.postDelayed(new splashHandler(), 1000);
+        hd.postDelayed(new splashHandler(), 2000);
     }
 
     private class splashHandler implements Runnable {

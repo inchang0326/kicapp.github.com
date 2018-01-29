@@ -1,4 +1,4 @@
-package com.example.me.myapplication;
+package com.example.me.codinggame;
 
 /**
  * Created by Me on 2018-01-20.
@@ -39,6 +39,20 @@ public enum BasicVoca {
         }
     };
 
+    // for debugging
+    /*
+    culture {
+        @Override
+        public String toString() {
+            return "culture";
+        }
+
+        @Override
+        public String meaningOf() {
+            return "문화";
+        }
+    };
+    */
     public abstract String toString();
     public abstract String meaningOf();
     public static int numberOf() {

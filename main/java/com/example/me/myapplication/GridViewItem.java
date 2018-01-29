@@ -1,10 +1,6 @@
-package com.example.me.myapplication;
+package com.example.me.codinggame;
 
 import android.graphics.drawable.Drawable;
-
-/**
- * Created by Me on 2018-01-24.
- */
 
 public class GridViewItem {
     private Drawable m_drawable;

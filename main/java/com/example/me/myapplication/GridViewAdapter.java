@@ -1,4 +1,4 @@
-package com.example.me.myapplication;
+package com.example.me.codinggame;
 
 import android.content.Context;
 import android.view.LayoutInflater;
