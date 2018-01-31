@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.transition.TransitionManager;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -33,6 +34,8 @@ public class ViewActivity extends Activity {
     private ImageView m_up, m_down, m_left, m_right, m_repeat, m_dingco;
     private Button m_back, m_clear, m_complete;
     private EditText m_repeatNum;
+    private Toast m_toast;
+    private TextView m_toastTextView;
     private GridView m_gridView;
     private GridViewAdapter m_gridViewAdapter;
     private TableLayout m_tableLayout;
@@ -47,10 +50,8 @@ public class ViewActivity extends Activity {
     private String m_voca;
     private char m_alphabatsMap[][];
     private int m_mapInfo = 0, m_characterR, m_characterC, m_correctAlphaCnt;
-    private int m_moveToMarginLeft = 0, m_moveToMarginTop = 0, m_firstMarginLeft = 0, m_firstMarginTop = 0;
+    private int m_moveToMarginLeft = 0, m_moveToMarginTop = 0, m_firstMarginLeft = 0, m_firstMarginTop = 0, m_winCnt = 0;
     private boolean m_repeatFlag = true;
-
-    private static int m_winCnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,11 @@ public class ViewActivity extends Activity {
         m_gridView = findViewById(R.id.codingStation);
         m_gridViewAdapter = new GridViewAdapter(getApplicationContext(), R.layout.gridview_item, m_listForCodingStation);
         m_dingco = findViewById(R.id.dingco);
+        m_toast = Toast.makeText(getApplicationContext(), "No message", Toast.LENGTH_SHORT);
+        ViewGroup group = (ViewGroup) m_toast.getView();
+        m_toastTextView = (TextView) group.getChildAt(0);
+        m_toastTextView.setText("hdfjsdhflaskehflsaenfnlseakf");
+        m_toastTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 38);
 
         // 레이아웃 모음
         m_tableLayout = findViewById(R.id.tableLayout);
@@ -130,7 +136,6 @@ public class ViewActivity extends Activity {
         m_gridView.setAdapter(m_gridViewAdapter);
         m_queueForCharacterMoving.clear();
         m_stackForAnswers.clear();
-        m_queueForMovingTask.clear();
         m_queueForRepeatNum.clear();
     }
 
@@ -144,9 +149,6 @@ public class ViewActivity extends Activity {
         m_alphabatsMap = getAlphaMap(getAlphaQueue());
         deleteMap();
         displayMap();
-
-        // 캐릭터 위치 지정
-        setDingcoStartPos();
     }
 
     private ArrayDeque<Character> getAlphaQueue() {
@@ -259,7 +261,7 @@ public class ViewActivity extends Activity {
             TableRow tableRow = new TableRow(this);
             for (int j = 1; j < m_mapInfo + 1; j++) {
                 TextView textView = new TextView(this);
-                textView.setTextSize(38);
+                textView.setTextSize(76);
                 textView.setBackgroundColor(Color.WHITE);
                 textView.setTextColor(Color.parseColor("#424242"));
                 textView.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -289,28 +291,28 @@ public class ViewActivity extends Activity {
         m_relativeLayout.removeAllViews();
         switch (m_mapInfo) {
             case 3: {
-                m_firstMarginLeft = 280;
-                m_firstMarginTop = 235;
-                m_moveToMarginLeft = 280;
-                m_moveToMarginTop = 165;
+                m_firstMarginLeft = 117;
+                m_firstMarginTop = 138;
+                m_moveToMarginLeft = 234;
+                m_moveToMarginTop = 114;
                 m_rlp.setMargins(m_firstMarginLeft, m_firstMarginTop, 0, 0);
                 m_relativeLayout.addView(m_dingco, m_rlp);
                 break;
             }
             case 4: {
-                m_firstMarginLeft = 245;
-                m_firstMarginTop = 150;
-                m_moveToMarginLeft = 215;
-                m_moveToMarginTop = 165;
+                m_firstMarginLeft = 88;
+                m_firstMarginTop = 82;
+                m_moveToMarginLeft = 177;
+                m_moveToMarginTop = 114;
                 m_rlp.setMargins(m_firstMarginLeft, m_firstMarginTop, 0, 0);
                 m_relativeLayout.addView(m_dingco, m_rlp);
                 break;
             }
             case 5: {
-                m_firstMarginLeft = 225;
-                m_firstMarginTop = 70;
-                m_moveToMarginLeft = 170;
-                m_moveToMarginTop = 165;
+                m_firstMarginLeft = 70;
+                m_firstMarginTop = 25;
+                m_moveToMarginLeft = 142;
+                m_moveToMarginTop = 114;
                 m_rlp.setMargins(m_firstMarginLeft, m_firstMarginTop, 0, 0);
                 m_relativeLayout.addView(m_dingco, m_rlp);
                 break;
@@ -341,51 +343,55 @@ public class ViewActivity extends Activity {
                     final View view = (View) event.getLocalState();
                     switch (view.getId()) {
                         case R.id.up:
-                            // 뷰 인플레터 오류 예외처리
+                            // 뷰 인플레트 예외처리
                             try {
                                 m_queueForCharacterMoving.add(Arrow.valueOf("up"));
                                 m_listForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.up)));
                                 m_gridView.setAdapter(m_gridViewAdapter);
                                 m_repeatFlag = true;
-                            } catch(Exception e) {
-                                Toast.makeText(getApplicationContext(), "블록을 다시 넣어주세요.", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                m_toastTextView.setText("블록을 다시 넣어주세요.");
+                                m_toast.show();
                             }
                             break;
                         case R.id.down:
-                            // 뷰 인플레터 오류 예외처리
+                            // 뷰 인플레트 예외처리
                             try {
                                 m_queueForCharacterMoving.add(Arrow.valueOf("down"));
                                 m_listForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.down)));
                                 m_gridView.setAdapter(m_gridViewAdapter);
                                 m_repeatFlag = true;
-                            } catch(Exception e) {
-                                Toast.makeText(getApplicationContext(), "블록을 다시 넣어주세요.", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                m_toastTextView.setText("블록을 다시 넣어주세요.");
+                                m_toast.show();
                             }
                             break;
                         case R.id.left:
-                            // 뷰 인플레터 오류 예외처리
+                            // 뷰 인플레트 예외처리
                             try {
                                 m_queueForCharacterMoving.add(Arrow.valueOf("left"));
                                 m_listForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.left)));
                                 m_gridView.setAdapter(m_gridViewAdapter);
                                 m_repeatFlag = true;
-                            } catch(Exception e) {
-                                Toast.makeText(getApplicationContext(), "블록을 다시 넣어주세요.", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                m_toastTextView.setText("블록을 다시 넣어주세요.");
+                                m_toast.show();
                             }
                             break;
                         case R.id.right:
-                            // 뷰 인플레터 오류 예외처리
+                            // 뷰 인플레트 예외처리
                             try {
                                 m_queueForCharacterMoving.add(Arrow.valueOf("right"));
                                 m_listForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.right)));
                                 m_gridView.setAdapter(m_gridViewAdapter);
                                 m_repeatFlag = true;
-                            } catch(Exception e) {
-                                Toast.makeText(getApplicationContext(), "블록을 다시 넣어주세요.", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                m_toastTextView.setText("블록을 다시 넣어주세요.");
+                                m_toast.show();
                             }
                             break;
                         case R.id.repeat:
-                            // repeat 블록이 연속으로 입력되는 것 예외처리
+                            // repeat 블록이 연속으로 입력되는 예외처리
                             if (m_repeatFlag) {
                                 // 반복 수
                                 String chk = m_repeatNum.getText().toString();
@@ -393,22 +399,24 @@ public class ViewActivity extends Activity {
                                 try {
                                     int value = Integer.parseInt(chk);
                                     if (value > 1 && value < 9) {
-                                        // 뷰 인플레터 오류 예외처리
+                                        // 뷰 인플레트 예외처리
                                         try {
                                             m_queueForRepeatNum.add(value);
                                             m_queueForCharacterMoving.add(Arrow.valueOf("repeat"));
                                             m_listForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.repeat)));
                                             m_gridView.setAdapter(m_gridViewAdapter);
                                             m_repeatFlag = false;
-                                            Log.d("inchang_ViewActivity", String.valueOf(m_queueForRepeatNum.peek()) + "입력 반복 수");
-                                        } catch(Exception e) {
-                                            Toast.makeText(getApplicationContext(), "블록을 다시 넣어주세요.", Toast.LENGTH_SHORT).show();
+                                        } catch (Exception e) {
+                                            m_toastTextView.setText("블록을 다시 넣어주세요.");
+                                            m_toast.show();
                                         }
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "반복은 최소 2번 최대 9번까지에요.", Toast.LENGTH_SHORT).show();
+                                        m_toastTextView.setText("반복은 2 ~ 9 사이의 숫자를 넣어주세요.");
+                                        m_toast.show();
                                     }
                                 } catch (NumberFormatException e) {
-                                    Toast.makeText(getApplicationContext(), "숫자로 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                    m_toastTextView.setText("숫자를 넣어주세요.");
+                                    m_toast.show();
                                 }
                             }
                             break;
@@ -424,12 +432,12 @@ public class ViewActivity extends Activity {
         public void onClick(View v) {
             m_repeatFlag = true;
             switch (v.getId()) {
-                case R.id.back: {// 이전 블록 지우기
+                case R.id.back: {
                     if (!m_listForCodingStation.isEmpty()) {
                         m_listForCodingStation.remove(m_listForCodingStation.size() - 1);
                         m_gridView.setAdapter(m_gridViewAdapter);
-                        if(m_queueForCharacterMoving.pollLast().toString().equals("repeat")) {
-                            Log.d("inchang_ViewActivity", String.valueOf(m_queueForRepeatNum.poll()) + "입력 삭제 반복 수");
+                        if (m_queueForCharacterMoving.pollLast().toString().equals("repeat")) {
+                            m_queueForRepeatNum.poll();
                         }
                     } else {
                         if (!m_stackForAnswers.isEmpty()) {
@@ -441,22 +449,25 @@ public class ViewActivity extends Activity {
                             queue.add(arrow);
                             new MovingTask(ViewActivity.this).execute(new MovingTaskParams(queue, queue.size(), -1));
                         } else {
-                            Toast.makeText(getApplicationContext(), "입력된 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
+                            m_toastTextView.setText("블록을 넣어주세요.");
+                            m_toast.show();
                         }
                     }
                     break;
                 }
                 case R.id.clear: {
-                    init();// 게임 정보 초기화
-                    setDingcoStartPos();// 캐릭터 처음 위치로
-                    Toast.makeText(getApplicationContext(), "모든 데이터를 삭제했습니다.", Toast.LENGTH_SHORT).show();
+                    init();
+                    setDingcoStartPos();
+                    m_toastTextView.setText("모든 블록을 지웠어요.");
+                    m_toast.show();
                     break;
                 }
                 case R.id.complete: {
 
                     // 입력된 코딩 블록이 없다면
                     if (m_listForCodingStation.isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "입력된 데이터가 없습니다.", Toast.LENGTH_SHORT).show();
+                        m_toastTextView.setText("블록을 넣어주세요.");
+                        m_toast.show();
 
                         // 입력된 코딩블록이 있다면
                     } else {
@@ -467,45 +478,35 @@ public class ViewActivity extends Activity {
 
                         // (1) 큐에 입력된 코딩 블록의 수 만큼 반복
                         while (m_queueForCharacterMoving.size() > 0) {
-                            Log.d("inchang_ViewActivity", "while 시작");
                             Arrow arrow = m_queueForCharacterMoving.poll();
-                            Log.d("inchang_ViewActivity", arrow.toString() + " 입력");
 
                             // (2) 코딩블록이 repeat일 경우
                             if (arrow.toString().equals("repeat")) {
                                 isRepeat = true;
-                                Log.d("inchang_ViewActivity", "Repeat 확인");
                                 repeatNum = m_queueForRepeatNum.poll();
 
                                 // (3) 코딩블록이 repeat이 아닐 경우
                             } else {
-                                Log.d("inchang_ViewActivity", String.valueOf(repeatNum) + "출력 반복 수");
                                 for (int i = 0; i < repeatNum; i++) {
 
-                                    Log.d("inchang_ViewActivity", "내부 캐릭터 이동 실행");
                                     // (4) 캐릭터 좌표 이동
                                     m_characterR += arrow.getRow();
                                     m_characterC += arrow.getCol();
-                                    Log.d("inchang_ViewActivity", String.valueOf(m_characterR) + "이동한 위치");
-                                    Log.d("inchang_ViewActivity", String.valueOf(m_characterC) + "이동한 위치");
 
-                                    // (5-1) 캐릭터가 이동한 자리에 있는 알파벳이 영단어에 포함되지 않는다면
-
-                                    // 아웃오브바운드 익셉션 예외 처리
+                                    // 아웃오브바운드 예외처리
                                     try {
+                                        // (5-1) 캐릭터가 이동한 자리에 있는 알파벳이 영단어에 포함되지 않는다면
                                         if (m_alphabatsMap[m_characterR][m_characterC] != m_voca.charAt(m_correctAlphaCnt)) {
-                                            Log.d("inchang_ViewActivity", "반복인데 틀림");
+                                            m_toastTextView.setText("다시 시도해보아요.");
+                                            m_toast.show();
                                             isFailed = true;
-                                            Toast.makeText(getApplicationContext(), " 다시 시도해보세요.", Toast.LENGTH_SHORT).show();
 
                                             // (5-2) 이전 좌표로 캐릭터 이동
                                             m_characterR -= arrow.getRow();
                                             m_characterC -= arrow.getCol();
-                                            Log.d("inchang_ViewActivity", String.valueOf(m_characterR) + "수정한 위치");
-                                            Log.d("inchang_ViewActivity", String.valueOf(m_characterC) + "수정한 위치");
 
                                             // (5-3) 정답이 아닌 코딩 블록 이후 큐 비우기
-                                            if (!m_queueForCharacterMoving.isEmpty()) {
+                                            while (!m_queueForCharacterMoving.isEmpty()) {
                                                 m_queueForCharacterMoving.poll();
                                             }
                                             // (6) 캐릭터가 이동한 자리에 있는 알파벳이 영단어에 포함된다면
@@ -513,9 +514,8 @@ public class ViewActivity extends Activity {
                                             m_stackForAnswers.add(arrow);
                                             m_correctAlphaCnt++;
                                             correctRepeatCnt++;
-                                            Log.d("inchang_ViewActivity", String.valueOf(m_correctAlphaCnt) + "알파벳 맞은 개수");
                                         }
-                                    } catch(Exception e) {
+                                    } catch (Exception e) {
                                         // 반복 시, 아웃오브인덱스 예외처리
                                         for (int j = 0; j < correctRepeatCnt; j++) {
                                             m_characterR -= arrow.getRow();
@@ -523,69 +523,64 @@ public class ViewActivity extends Activity {
                                             m_correctAlphaCnt--;
                                             m_stackForAnswers.pop();
                                         }
-                                        // 예외처리 지점을 추가하기 때문에 한번 더 빼줘야 함
+                                        // 예외가 발생한 지점을 추가하기 때문에 한번 더 빼줘야 함
                                         m_characterR -= arrow.getRow();
                                         m_characterC -= arrow.getCol();
-                                        Log.d("inchang_ViewActivity", "아웃오브인덱스 예외처리");
-                                        Log.d("inchang_ViewActivity", String.valueOf(m_characterR) + "아웃오브인덱스 위치 수정");
-                                        Log.d("inchang_ViewActivity", String.valueOf(m_characterC) + "아웃오브인덱스 위치 수정");
-                                        Log.d("inchang_ViewActivity", String.valueOf(m_correctAlphaCnt) + "알파벳 맞은 개수");
+                                        m_toastTextView.setText("다시 시도해보아요.");
+                                        m_toast.show();
                                         isFailed = true;
                                         correctRepeatCnt = 0;
                                         break;
                                     }
                                 }
-                                Log.d("inchang_ViewActivity", "while 종료");
-                                // 반복 시, 틀린 블록이 있는 경우
+                                // (7) 반복 중에 알파벳이 틀렸을 경우
                                 if (isRepeat && isFailed) {
-                                    // (5-4) 잘못 반복된 만큼 이전 좌표로 캐릭터 이동
+                                    // 잘못 반복된 만큼 이전 좌표로 캐릭터 이동
                                     for (int i = 0; i < correctRepeatCnt; i++) {
                                         m_characterR -= arrow.getRow();
                                         m_characterC -= arrow.getCol();
                                         m_correctAlphaCnt--;
                                         m_stackForAnswers.pop();
-                                        Log.d("inchang_ViewActivity", "반복인데 틀려서 이전 위치로 이동");
-                                        Log.d("inchang_ViewActivity", String.valueOf(m_characterR) + "위치 수정");
-                                        Log.d("inchang_ViewActivity", String.valueOf(m_characterC) + "위치 수정");
+                                        m_toastTextView.setText("다시 시도해보아요.");
+                                        m_toast.show();
                                     }
-                                    // (7) 캐릭터 이동
+                                    // (8) 캐릭터 이동
                                 } else if (!isRepeat && !isFailed) {
-                                    Log.d("inchang_ViewActivity", "반복 없이 정상 이동");
                                     m_queueForMovingTask.add(arrow);
+                                    // (9) 반복 수 만큼 캐릭터 이동
                                 } else if (isRepeat && !isFailed) {
                                     for (int i = 0; i < repeatNum; i++) {
-                                        Log.d("inchang_ViewActivity", "반복 이동");
-                                        m_queueForMovingTask.add(arrow);
+                                         m_queueForMovingTask.add(arrow);
                                     }
                                 }
-                                // (8) 반복수 초기화
+                                // (10) 값 초기화
                                 repeatNum = 1;
                                 isRepeat = false;
                                 correctRepeatCnt = 0;
                                 isFailed = false;
                             }
-                            Log.d("inchang_ViewActivity", "while 종료");
                         }
+                        // (11) UI 작업
                         new MovingTask(ViewActivity.this).execute(new MovingTaskParams(m_queueForMovingTask, m_queueForMovingTask.size(), 1));
                     }
                     // 영어단어를 맞췄을 경우 재시작, 게임 정보 초기화
                     if (m_correctAlphaCnt == m_voca.length()) {
-                        Toast.makeText(getApplicationContext(), "축하합니다!", Toast.LENGTH_SHORT).show();
+                        m_toastTextView.setText("축하해요!!");
+                        m_toast.show();
 
                         // 영단어 팝업 메시지
                         Intent i = new Intent(ViewActivity.this, DialogActivity.class);
                         String info[] = {m_voca, String.valueOf(m_mapInfo)};
                         i.putExtra("info", info);
-                        startActivity(i);
+                        startActivityForResult(i, 0);
 
-                        m_winCnt++;// 승리 수 증가
                         init();// 게임 정보 초기화
                         generateMap();// 맵 생성
-
-                        if (m_winCnt > 2) {
-                            Toast.makeText(getApplicationContext(), "심화 영단어 단계도 풀어보아요!", Toast.LENGTH_LONG).show();
-                            LevelActivity.advancedVButton.setEnabled(true);
-                            LevelActivity.advancedVButton.setImageResource(R.drawable.advancedv);
+                        m_winCnt++;// 승리 수 증가
+                        if (m_winCnt > 0) {
+                            m_toastTextView.setText("심화 영단어도 도전해보아요!!");
+                            m_toast.show();
+                            setResult(RESULT_OK);
                         }
                     }
                     break;
@@ -593,6 +588,16 @@ public class ViewActivity extends Activity {
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULT_OK:
+                setDingcoStartPos();
+                break;
+        }
+    }
 
     public RelativeLayout getRelativeLayout() {
         return m_relativeLayout;

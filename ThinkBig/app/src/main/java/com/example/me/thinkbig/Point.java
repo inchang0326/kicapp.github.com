@@ -5,7 +5,8 @@ public class Point {
     private int m_currC;
     private char m_alpha;
 
-    public Point() {}
+    public Point() {
+    }
 
     public Point(char alpha, int currR, int currC) {
         m_alpha = alpha;

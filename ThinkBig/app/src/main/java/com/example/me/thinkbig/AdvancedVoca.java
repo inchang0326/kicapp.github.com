@@ -12,17 +12,6 @@ public enum AdvancedVoca {
             return "중요한";
         }
     },
-    experience {
-        @Override
-        public String toString() {
-            return "experience";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "경험";
-        }
-    },
     treasure {
         @Override
         public String toString() {
@@ -36,10 +25,13 @@ public enum AdvancedVoca {
     };
 
     public abstract String toString();
+
     public abstract String meaningOf();
+
     public static int numberOf() {
         return AdvancedVoca.values().length;
     }
+
     public static AdvancedVoca valueOf(int n) {
         return AdvancedVoca.values()[n];
     }

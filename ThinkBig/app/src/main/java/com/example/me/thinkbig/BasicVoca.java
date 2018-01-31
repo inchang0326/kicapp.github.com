@@ -1,17 +1,6 @@
 package com.example.me.thinkbig;
 
 public enum BasicVoca {
-    dream {
-        @Override
-        public String toString() {
-            return "dream";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "꿈(목표)";
-        }
-    },
     think {
         @Override
         public String toString() {
@@ -35,25 +24,14 @@ public enum BasicVoca {
         }
     };
 
-    // for debugging
-    /*
-    culture {
-        @Override
-        public String toString() {
-            return "culture";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "문화";
-        }
-    };
-    */
     public abstract String toString();
+
     public abstract String meaningOf();
+
     public static int numberOf() {
         return BasicVoca.values().length;
     }
+
     public static BasicVoca valueOf(int n) {
         return BasicVoca.values()[n];
     }

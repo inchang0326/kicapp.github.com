@@ -8,24 +8,22 @@
 
     <ImageButton
         android:id="@+id/bookpad"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:background="@drawable/modeedgecircle"
-        android:enabled="false"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_margin="25dp"
         android:scaleType="centerInside"
         android:src="@drawable/bookpad"
-        android:paddingTop="10dp"/>
+        android:padding="40dp"
+        android:background="@drawable/comm_con_bg"/>
 
     <ImageButton
         android:id="@+id/controller"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/modeedgecircle"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_margin="25dp"
         android:scaleType="centerInside"
         android:src="@drawable/controller"
-        android:paddingTop="10dp"/>
+        android:padding="40dp"
+        android:background="@drawable/comm_con_bg"/>
 
 </LinearLayout>

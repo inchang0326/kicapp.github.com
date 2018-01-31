@@ -25,12 +25,12 @@ public class DialogActivity extends Activity {
         m_check = findViewById(R.id.check);
 
         m_voca.setText(info[0]);
-        switch(Integer.parseInt(info[1])) {
-            case 3 : {
+        switch (Integer.parseInt(info[1])) {
+            case 3: {
                 m_description.setText(BasicVoca.valueOf(info[0]).meaningOf());
                 break;
             }
-            case 4 : {
+            case 4: {
                 m_description.setText(AdvancedVoca.valueOf(info[0]).meaningOf());
                 break;
             }
@@ -43,8 +43,9 @@ public class DialogActivity extends Activity {
 
         @Override
         public void onClick(View v) {
-            switch(v.getId()) {
-                case R.id.check : {
+            switch (v.getId()) {
+                case R.id.check: {
+                    setResult(RESULT_OK);
                     finish();
                     break;
                 }

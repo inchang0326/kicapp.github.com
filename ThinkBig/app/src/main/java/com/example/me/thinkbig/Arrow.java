@@ -1,58 +1,77 @@
 package com.example.me.thinkbig;
 
 public enum Arrow {
-    up{
+    up {
         @Override
         public int getRow() {
             return -1;
         }
+
         @Override
         public int getCol() {
             return 0;
         }
     },
-    down{
+    down {
         @Override
         public int getRow() {
             return 1;
         }
+
         @Override
         public int getCol() {
             return 0;
         }
     },
-    left{
+    left {
         @Override
         public int getRow() {
             return 0;
         }
+
         @Override
         public int getCol() {
             return -1;
         }
     },
-    right{
+    right {
         @Override
         public int getRow() {
             return 0;
         }
+
         @Override
         public int getCol() {
             return 1;
         }
     },
-    repeat{
+    repeat {
         @Override
         public int getRow() {
             return 0;
         }
+
+        @Override
+        public int getCol() {
+            return 0;
+        }
+    },
+    dummy {
+        @Override
+        public int getRow() {
+            return 0;
+        }
+
         @Override
         public int getCol() {
             return 0;
         }
     };
+
     public abstract int getRow();
+
     public abstract int getCol();
+
     public static Arrow valueOf(int n) {
         return Arrow.values()[n];
     }

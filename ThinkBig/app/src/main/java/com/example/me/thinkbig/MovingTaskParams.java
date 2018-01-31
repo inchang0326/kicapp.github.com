@@ -1,5 +1,7 @@
 package com.example.me.thinkbig;
 
+import android.util.Log;
+
 import java.util.Queue;
 
 public class MovingTaskParams {
@@ -32,8 +34,11 @@ public class MovingTaskParams {
         m_dir = dir;
     }
 
+    // 널포인트익셉션 예외 처리
     public Arrow getArrow() {
-        return m_queue.poll();
+        Arrow arrow = m_queue.poll();
+        if (arrow != null) return arrow;
+        else return Arrow.dummy;
     }
 
     public void setArrow(Arrow arrow) {

@@ -1,12 +1,17 @@
 package com.example.me.thinkbig;
 
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
 
     private ViewActivity m_va;
+
     public MovingTask(ViewActivity va) {
         m_va = va;
     }
@@ -37,16 +42,15 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
     protected Boolean doInBackground(MovingTaskParams... params) {
 
         int currMarginLeft, currMarginTop;
-        // repeat 버튼의 반복 수 만큼
         for (int i = 0; i < params[0].getSize(); i++) {
-            // 캐릭터가 가야하는 방향에 따라
+
             Arrow arrow = params[0].getArrow();
             switch (arrow) {
                 case up: {
                     switch (params[0].getDir()) {
                         case 1: {
                             m_destMarginTop = m_startMarginTop - m_moveToMarginTop;
-                            for (currMarginTop = m_startMarginTop; currMarginTop > m_destMarginTop; currMarginTop-=5) {
+                            for (currMarginTop = m_startMarginTop; currMarginTop > m_destMarginTop; currMarginTop--) {
                                 publishProgress(m_startMarginLeft, currMarginTop);
                                 try {
                                     Thread.sleep(1);
@@ -59,7 +63,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
                         }
                         case -1: {
                             m_destMarginTop = m_startMarginTop + m_moveToMarginTop;
-                            for (currMarginTop = m_startMarginTop; currMarginTop < m_destMarginTop; currMarginTop+=5) {
+                            for (currMarginTop = m_startMarginTop; currMarginTop < m_destMarginTop; currMarginTop++) {
                                 publishProgress(m_startMarginLeft, currMarginTop);
                                 try {
                                     Thread.sleep(1);
@@ -77,7 +81,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
                     switch (params[0].getDir()) {
                         case 1: {
                             m_destMarginTop = m_startMarginTop + m_moveToMarginTop;
-                            for (currMarginTop = m_startMarginTop; currMarginTop < m_destMarginTop; currMarginTop+=5) {
+                            for (currMarginTop = m_startMarginTop; currMarginTop < m_destMarginTop; currMarginTop++) {
                                 publishProgress(m_startMarginLeft, currMarginTop);
                                 try {
                                     Thread.sleep(1);
@@ -90,7 +94,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
                         }
                         case -1: {
                             m_destMarginTop = m_startMarginTop - m_moveToMarginTop;
-                            for (currMarginTop = m_startMarginTop; currMarginTop > m_destMarginTop; currMarginTop-=5) {
+                            for (currMarginTop = m_startMarginTop; currMarginTop > m_destMarginTop; currMarginTop--) {
                                 publishProgress(m_startMarginLeft, currMarginTop);
                                 try {
                                     Thread.sleep(1);
@@ -108,7 +112,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
                     switch (params[0].getDir()) {
                         case 1: {
                             m_destMarginLeft = m_startMarginLeft - m_moveToMarginLeft;
-                            for (currMarginLeft = m_startMarginLeft; currMarginLeft > m_destMarginLeft; currMarginLeft-=5) {
+                            for (currMarginLeft = m_startMarginLeft; currMarginLeft > m_destMarginLeft; currMarginLeft--) {
                                 publishProgress(currMarginLeft, m_startMarginTop);
                                 try {
                                     Thread.sleep(1);
@@ -121,7 +125,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
                         }
                         case -1: {
                             m_destMarginLeft = m_startMarginLeft + m_moveToMarginLeft;
-                            for (currMarginLeft = m_startMarginLeft; currMarginLeft < m_destMarginLeft; currMarginLeft+=5) {
+                            for (currMarginLeft = m_startMarginLeft; currMarginLeft < m_destMarginLeft; currMarginLeft++) {
                                 publishProgress(currMarginLeft, m_startMarginTop);
                                 try {
                                     Thread.sleep(1);
@@ -139,7 +143,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
                     switch (params[0].getDir()) {
                         case 1: {
                             m_destMarginLeft = m_startMarginLeft + m_moveToMarginLeft;
-                            for (currMarginLeft = m_startMarginLeft; currMarginLeft < m_destMarginLeft; currMarginLeft+=5) {
+                            for (currMarginLeft = m_startMarginLeft; currMarginLeft < m_destMarginLeft; currMarginLeft++) {
                                 publishProgress(currMarginLeft, m_startMarginTop);
                                 try {
                                     Thread.sleep(1);
@@ -152,7 +156,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
                         }
                         case -1: {
                             m_destMarginLeft = m_startMarginLeft - m_moveToMarginLeft;
-                            for (currMarginLeft = m_startMarginLeft; currMarginLeft > m_destMarginLeft; currMarginLeft-=5) {
+                            for (currMarginLeft = m_startMarginLeft; currMarginLeft > m_destMarginLeft; currMarginLeft--) {
                                 publishProgress(currMarginLeft, m_startMarginTop);
                                 try {
                                     Thread.sleep(1);
