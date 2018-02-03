@@ -165,7 +165,6 @@ public class ViewActivity extends Activity {
                 queue.add(m_voca.charAt(i));
             else {
                 char rc = alphas[randomGenerator.nextInt(alphas.length)];
-                // 포함된 알파벳이 아니라면 큐에 저장
                 queue.add(rc);
             }
         }
@@ -295,8 +294,6 @@ public class ViewActivity extends Activity {
                 m_firstMarginTop = 138;
                 m_moveToMarginLeft = 234;
                 m_moveToMarginTop = 114;
-                m_rlp.setMargins(m_firstMarginLeft, m_firstMarginTop, 0, 0);
-                m_relativeLayout.addView(m_dingco, m_rlp);
                 break;
             }
             case 4: {
@@ -304,8 +301,6 @@ public class ViewActivity extends Activity {
                 m_firstMarginTop = 82;
                 m_moveToMarginLeft = 177;
                 m_moveToMarginTop = 114;
-                m_rlp.setMargins(m_firstMarginLeft, m_firstMarginTop, 0, 0);
-                m_relativeLayout.addView(m_dingco, m_rlp);
                 break;
             }
             case 5: {
@@ -313,11 +308,17 @@ public class ViewActivity extends Activity {
                 m_firstMarginTop = 25;
                 m_moveToMarginLeft = 142;
                 m_moveToMarginTop = 114;
-                m_rlp.setMargins(m_firstMarginLeft, m_firstMarginTop, 0, 0);
-                m_relativeLayout.addView(m_dingco, m_rlp);
                 break;
             }
         }
+        m_rlp.setMargins(m_firstMarginLeft, m_firstMarginTop, 0, 0);
+        m_relativeLayout.addView(m_dingco, m_rlp);
+    }
+
+    public void setDingcoLastPos(int left, int top, int right, int bottom) {
+        m_relativeLayout.removeAllViews();
+        m_rlp.setMargins(left, top, right, bottom);
+        m_relativeLayout.addView(m_dingco, m_rlp);
     }
 
     View.OnTouchListener touchListener = new View.OnTouchListener() {
@@ -605,12 +606,6 @@ public class ViewActivity extends Activity {
 
     public RelativeLayout.LayoutParams getLayoutParams() {
         return m_rlp;
-    }
-
-    public void setLastDingcoPos(int left, int top, int right, int bottom) {
-        m_relativeLayout.removeAllViews();
-        m_rlp.setMargins(left, top, right, bottom);
-        m_relativeLayout.addView(m_dingco, m_rlp);
     }
 
     public ImageView getDingco() {

@@ -177,7 +177,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
 
     @Override
     protected void onProgressUpdate(Integer... posInfo) {
-        m_va.setLastDingcoPos(posInfo[0], posInfo[1], 0, 0);
+        m_va.setDingcoLastPos(posInfo[0], posInfo[1], 0, 0);
     }
 
     @Override
