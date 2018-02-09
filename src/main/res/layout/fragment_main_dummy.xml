@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.a10010952.btproject.MainActivity$DummySectionFragment" >
+
+    <TextView
+        android:id="@+id/text_chat"
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:paddingTop="15dp"
+        android:layout_weight="1"
+        android:text="시작 !!"
+        android:textSize="30dp"
+        android:lineSpacingExtra="10dp"
+        style="@style/AppTheme.FormText" />
+    
+    <LinearLayout 
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        
+        <EditText android:id="@+id/edit_chat"
+            android:layout_width="0dip"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:layout_gravity="bottom"
+            android:inputType="textUri"
+            android:textSize="30dp"
+            style="@style/AppTheme.FormEditText" />
+        
+        <Button 
+            android:id="@+id/button_send"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="@string/ui_send"
+            android:textSize="30dp"
+            style="@style/AppTheme.FormButton" />
+        
+    </LinearLayout>
+
+</LinearLayout>
