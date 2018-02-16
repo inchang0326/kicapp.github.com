@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:fab="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,33 +53,33 @@
 
                     <ImageView
                         android:id="@+id/up"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="@drawable/up"
+                        android:layout_width="97dp"
+                        android:layout_height="97dp"
+                        android:background="@drawable/codinggame_up"
                         android:contentDescription="up"
                         android:layout_margin="1dp"/>
 
                     <ImageView
                         android:id="@+id/down"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="@drawable/down"
+                        android:layout_width="97dp"
+                        android:layout_height="97dp"
+                        android:background="@drawable/codinggame_down"
                         android:contentDescription="down"
                         android:layout_margin="1dp"/>
 
                     <ImageView
                         android:id="@+id/left"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="@drawable/left"
+                        android:layout_width="97dp"
+                        android:layout_height="97dp"
+                        android:background="@drawable/codinggame_left"
                         android:contentDescription="left"
                         android:layout_margin="1dp"/>
 
                     <ImageView
                         android:id="@+id/right"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
-                        android:background="@drawable/right"
+                        android:layout_width="97dp"
+                        android:layout_height="97dp"
+                        android:background="@drawable/codinggame_right"
                         android:contentDescription="right"
                         android:layout_margin="1dp"/>
                 </GridLayout>
@@ -90,12 +90,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:orientation="horizontal"
-                    android:paddingBottom="5dp">
+                    android:paddingBottom="5dp"
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/repeat"
-                        android:layout_width="43dp"
-                        android:layout_height="43dp"
+                        android:layout_width="97dp"
+                        android:layout_height="97dp"
                         android:background="@drawable/repeat"
                         android:contentDescription="repeat"
                         android:layout_margin="1dp"
@@ -105,10 +106,11 @@
                         android:id="@+id/repeatnum"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
+                        android:text="2"
                         android:textAlignment="center"
                         android:visibility="gone"
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:textSize="50dp"/>
 
                 </LinearLayout>
 
@@ -121,42 +123,45 @@
 
                     <Button
                         android:id="@+id/back"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="2.5dp"
-                        android:layout_marginRight="2.5dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="#424242"
-                        android:text="Undo"
+                        android:text="되돌리기"
                         android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textSize="32dp"/>
 
                     <Button
                         android:id="@+id/clear"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="2.5dp"
-                        android:layout_marginRight="2.5dp"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="#424242"
-                        android:text="Clear"
+                        android:text="처음으로"
                         android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textSize="32dp"/>
 
                     <Button
-                        android:id="@+id/complete"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginLeft="2.5dp"
-                        android:layout_marginRight="2.5dp"
+                        android:id="@+id/run"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="#424242"
-                        android:text="Run"
+                        android:text="실행하기"
                         android:textColor="#FFFFFF"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textSize="32dp"/>
 
                 </LinearLayout>
 
@@ -182,9 +187,9 @@
                     android:id="@+id/text2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Learn words :"
+                    android:text="다음 영어 단어를 찾아보세요 :"
                     android:textColor="#ffffff"
-                    android:textSize="20dp"
+                    android:textSize="38dp"
                     android:textStyle="bold"
                     android:gravity="center_horizontal"/>
 
@@ -194,7 +199,7 @@
                     android:layout_height="wrap_content"
                     android:text="English Voca"
                     android:textColor="#f76363"
-                    android:textSize="20dp"
+                    android:textSize="38dp"
                     android:textStyle="bold"
                     android:gravity="center_horizontal"
                     android:layout_toRightOf="@+id/text2"
@@ -202,21 +207,41 @@
 
             </RelativeLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:background="#FFFFFF"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:background="#FFFFFF">
 
-                <TableLayout
-                    android:id="@+id/tableLayout"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#c1cdcd">
+                    android:layout_gravity="center"
+                    android:paddingLeft="70dp"
+                    android:paddingRight="70dp"
+                    android:background="#FFFFFF">
 
-                </TableLayout>
-            </LinearLayout>
+                    <TableLayout
+                        android:id="@+id/tableLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#c1cdcd">
+                    </TableLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/dingcocontainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/dingco"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </RelativeLayout>
+
+            </FrameLayout>
 
         </LinearLayout>
 
