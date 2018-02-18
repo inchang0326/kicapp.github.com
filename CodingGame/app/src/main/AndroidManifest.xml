@@ -45,9 +45,6 @@
             android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
             android:configChanges="keyboardHidden|orientation|screenSize" >
         </activity>
-        <activity android:name="com.wjthinkbig.a10010952.btproject.ControlActivity"
-            android:screenOrientation="landscape">
-        </activity>
         <!-- Service -->
         <service
             android:name= "com.wjthinkbig.a10010952.btproject.service.BTCTemplateService"

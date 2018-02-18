@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-package com.example.a10010952.btproject.fragments;
+package com.wjthinkbig.a10010952.btproject.fragments;
 
 import java.util.Locale;
 
-import com.hardcopy.btchat.R;
-import com.hardcopy.btchat.R.string;
-
 import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -74,7 +70,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 
 		} else if(position == FRAGMENT_POS_CONTROL) {
 			if(mLLSettingsFragment == null) {
-				mLLSettingsFragment = new ControlFragment(mContext, mFragmentListener);
+				mLLSettingsFragment = new GameFragment(mContext, mFragmentListener);
 				//needToSetArguments = true;
 			}
 			fragment = mLLSettingsFragment;
@@ -107,7 +103,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 		case FRAGMENT_POS_EXAMPLE:
 			return "자유 코딩";
 		case FRAGMENT_POS_CONTROL:
-			return "자유 조종";
+			return "코딩 게임";
 		}
 		return null;
 	}

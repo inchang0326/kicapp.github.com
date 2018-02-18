@@ -18,8 +18,6 @@ package com.wjthinkbig.a10010952.btproject;
 
 import java.util.Set;
 
-import com.wjthinkbig.a10010952.R;
-
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -38,6 +36,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+
+import com.wjthinkbig.a10010952.R;
 
 /**
  * This Activity appears as a dialog. It lists any paired devices and

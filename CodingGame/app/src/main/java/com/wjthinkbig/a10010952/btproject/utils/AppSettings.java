@@ -24,14 +24,12 @@ public class AppSettings {
 	// Constants
 	public static final int SETTINGS_BACKGROUND_SERVICE = 1;
 	
-	
 	private static boolean mIsInitialized = false;
 	private static Context mContext;
 	
 	// Setting values
 	private static boolean mUseBackgroundService;
-	
-	
+
 	public static void initializeAppSettings(Context c) {
 		if(mIsInitialized)
 			return;

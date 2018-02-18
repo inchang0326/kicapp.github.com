@@ -166,9 +166,9 @@ public class ViewActivity extends Activity {
         m_repeat = (ImageView) transitionsContainer.findViewById(R.id.repeat);
         m_repeat.setOnClickListener(new View.OnClickListener() {
             boolean visible;
-
             @Override
             public void onClick(View v) {
+
                 TransitionManager.beginDelayedTransition(transitionsContainer);
                 visible = !visible;
                 m_repeatNum.setVisibility(visible ? View.VISIBLE : View.GONE);

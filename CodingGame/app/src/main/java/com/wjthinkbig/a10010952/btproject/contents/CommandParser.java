@@ -17,8 +17,7 @@ public class CommandParser {
 	public CommandParser() {
 		mReceivedString = new StringBuilder();
 	}
-	
-	
+
 	public int setString(String message) {
 		mReceivedString.append(message);
 		return checkCommand();
@@ -36,9 +35,7 @@ public class CommandParser {
 		mCommand = COMMAND_NONE;
 		mParameters = null;
 	}
-	
-	
-	
+
 	private int checkCommand() {
 		int prefixIndex = mReceivedString.lastIndexOf(THINGSPEAK_PREFIX);
 		if(prefixIndex > -1) {

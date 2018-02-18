@@ -38,7 +38,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.wjthinkbig.a10010952.R;
 
 public class Utils {
 	private Context mContext;

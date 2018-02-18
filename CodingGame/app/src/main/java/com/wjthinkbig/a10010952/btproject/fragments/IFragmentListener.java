@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.a10010952.btproject.fragments;
+package com.wjthinkbig.a10010952.btproject.fragments;
 
 public interface IFragmentListener {
 	public static final int CALLBACK_RUN_IN_BACKGROUND = 1;

@@ -19,6 +19,7 @@ package com.wjthinkbig.a10010952.btproject.service;
 import java.util.ArrayList;
 import java.util.Timer;
 
+import com.wjthinkbig.a10010952.btproject.MainActivity;
 import com.wjthinkbig.a10010952.btproject.bluetooth.*;
 import com.wjthinkbig.a10010952.btproject.contents.CommandParser;
 import com.wjthinkbig.a10010952.btproject.utils.AppSettings;
@@ -61,7 +62,8 @@ public class BTCTemplateService extends Service {
 	private Timer mRefreshTimer = null;
 	private Timer mDeleteTimer = null;
     
-	
+	private boolean m_chkConnected = false;
+
 	/*****************************************************
 	 *	Overrided methods
 	 ******************************************************/
@@ -97,6 +99,8 @@ public class BTCTemplateService extends Service {
 	@Override
 	public boolean onUnbind(Intent intent) {
 		Logs.d(TAG, "# Service - onUnbind()");
+		m_chkConnected = false;
+		mBluetoothAdapter.disable();
 		return true;
 	}
 	
@@ -104,6 +108,7 @@ public class BTCTemplateService extends Service {
 	public void onDestroy() {
 		Logs.d(TAG, "# Service - onDestroy()");
 		finalizeService();
+		m_chkConnected = false;
 	}
 	
 	@Override
@@ -237,7 +242,7 @@ public class BTCTemplateService extends Service {
      */
 	public boolean isBluetoothEnabled() {
 		if(mBluetoothAdapter==null) {
-			Logs.e(TAG, "# Service - cannot find bluetooth adapter. Restart app.");
+			Log.e(TAG, "# Service - cannot find bluetooth adapter. Restart app.");
 			return false;
 		}
 		return mBluetoothAdapter.isEnabled();
@@ -258,22 +263,17 @@ public class BTCTemplateService extends Service {
      * Initiate a connection to a remote device.
      * @param address  Device's MAC address to connect
      */
-	public boolean connectDevice(String address) {
+	public void connectDevice(String address) {
 		Logs.d(TAG, "Service - connect to " + address);
-		
+
 		// Get the BluetoothDevice object
 		if(mBluetoothAdapter != null) {
 			BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-			
+
 			if(device != null && mBtManager != null) {
 				mBtManager.connect(device);
-				return true;
 			}
-
-			else return false;
 		}
-
-		else return false;
 	}
 	
     /**
@@ -389,7 +389,7 @@ public class BTCTemplateService extends Service {
 				break;
 				
 			case BluetoothManager.MESSAGE_DEVICE_NAME:
-				Log.d(TAG, "Service - MESSAGE_DEVICE_NAME: ");
+				Logs.d(TAG, "Service - MESSAGE_DEVICE_NAME: ");
 				
 				// save connected device's name and notify using toast
 				String deviceAddress = msg.getData().getString(Constants.SERVICE_HANDLER_MSG_KEY_DEVICE_ADDRESS);
@@ -399,9 +399,10 @@ public class BTCTemplateService extends Service {
 					// Remember device's address and name
 					mConnectionInfo.setDeviceAddress(deviceAddress);
 					mConnectionInfo.setDeviceName(deviceName);
-					
-					Toast.makeText(getApplicationContext(), 
+
+					Toast.makeText(getApplicationContext(),
 							"Connected to " + deviceName, Toast.LENGTH_SHORT).show();
+					m_chkConnected = true;
 				}
 				break;
 				
@@ -418,4 +419,8 @@ public class BTCTemplateService extends Service {
 			super.handleMessage(msg);
 		}
 	}	// End of class MainHandler
+
+	public boolean getConnectedState() {
+		return m_chkConnected;
+	}
 }

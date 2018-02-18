@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.a10010952.btproject.fragments;
+package com.wjthinkbig.a10010952.btproject.fragments;
 
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.method.ScrollingMovementMethod;
 import android.content.Context;
 import android.os.Bundle;
@@ -31,14 +30,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.hardcopy.btchat.R;
+import com.wjthinkbig.a10010952.R;
+import com.wjthinkbig.a10010952.btproject.MainActivity;
 
 public class ExampleFragment extends Fragment implements View.OnClickListener {
 
 	private Context mContext = null;
 	private IFragmentListener mFragmentListener = null;
 	private Handler mActivityHandler = null;
-	
+
+	private MainActivity m_ma;
+
 	TextView mTextChat;
 	EditText mEditChat;
 	Button mBtnSend;
@@ -47,6 +49,7 @@ public class ExampleFragment extends Fragment implements View.OnClickListener {
 		mContext = c;
 		mFragmentListener = l;
 		mActivityHandler = h;
+		m_ma = (MainActivity) mContext;
 	}
 	
 	@Override
@@ -71,9 +74,14 @@ public class ExampleFragment extends Fragment implements View.OnClickListener {
 	public void onClick(View v) {
 		switch(v.getId()) {
 		case R.id.button_send:
-            String message = mEditChat.getText().toString();
-            if(message != null && message.length() > 0)
-            	sendMessage(message);
+			if (m_ma.getTemplateService().getConnectedState() && m_ma.getTemplateService().isBluetoothEnabled()) {
+				String message = mEditChat.getText().toString();
+				if (message != null && message.length() > 0)
+					sendMessage(message);
+			}
+			else {
+				m_ma.setToastMessage("블루투스 장치를 연결해주세요.");
+			}
 			break;
 		}
 	}
@@ -122,9 +130,8 @@ public class ExampleFragment extends Fragment implements View.OnClickListener {
     		long current = System.currentTimeMillis();
     		
     		if(current - mLastReceivedTime > NEW_LINE_INTERVAL) {
-    			mTextChat.append("\nRC카 : ");
+				mTextChat.append("\nRC카 : 잘못된 명령어를 입력했어요.");
     		}
-    		mTextChat.append(message);
         	int scrollamout = mTextChat.getLayout().getLineTop(mTextChat.getLineCount()) - mTextChat.getHeight();
         	if (scrollamout > mTextChat.getHeight())
         		mTextChat.scrollTo(0, scrollamout);
