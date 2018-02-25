@@ -4,11 +4,12 @@ import android.os.AsyncTask;
 
 import com.wjthinkbig.a10010952.codinggame.Arrow;
 
-public class MovingBackTask extends AsyncTask<Arrow, Integer, Boolean> {
+public class MovingBackTask2 extends AsyncTask<Arrow, Integer, Boolean> {
 
-    private GameFragment m_gf;
+    private GameFragment2 m_gf;
     private boolean flag = false;
-    public MovingBackTask(GameFragment gf) {
+
+    public MovingBackTask2(GameFragment2 gf) {
         m_gf = gf;
     }
 

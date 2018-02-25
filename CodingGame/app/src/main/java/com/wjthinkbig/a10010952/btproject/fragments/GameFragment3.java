@@ -1,3 +1,5 @@
+package com.wjthinkbig.a10010952.btproject.fragments;
+
 /*
  * Copyright (C) 2014 Bluetooth Connection Template
  *
@@ -13,19 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.wjthinkbig.a10010952.btproject.fragments;
-
-import com.wjthinkbig.a10010952.R;
-import com.wjthinkbig.a10010952.btproject.utils.AppSettings;
-import com.wjthinkbig.a10010952.codinggame.AdvancedVoca;
-import com.wjthinkbig.a10010952.codinggame.Arrow;
-import com.wjthinkbig.a10010952.codinggame.BasicVoca;
-import com.wjthinkbig.a10010952.codinggame.GridViewAdapter;
-import com.wjthinkbig.a10010952.codinggame.GridViewItem;
-import com.wjthinkbig.a10010952.codinggame.MovingTaskParams;
-import com.wjthinkbig.a10010952.codinggame.Point;
-import com.wjthinkbig.a10010952.codinggame.Sentence;
 
 import android.content.ClipData;
 import android.content.Context;
@@ -51,18 +40,32 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wjthinkbig.a10010952.R;
+import com.wjthinkbig.a10010952.btproject.MainActivity;
+import com.wjthinkbig.a10010952.btproject.utils.AppSettings;
+import com.wjthinkbig.a10010952.codinggame.AdvancedVoca;
+import com.wjthinkbig.a10010952.codinggame.Arrow;
+import com.wjthinkbig.a10010952.codinggame.BasicVoca;
+import com.wjthinkbig.a10010952.codinggame.GridViewAdapter;
+import com.wjthinkbig.a10010952.codinggame.GridViewItem;
+import com.wjthinkbig.a10010952.codinggame.MovingTaskParams;
+import com.wjthinkbig.a10010952.codinggame.Sentence;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
-public class GameFragment extends Fragment {
+import static android.view.View.GONE;
 
-    private final static int CLEAR_BTN_CLICKED = 1,
-            CLEAR_BTN_NOT_CLICKED = 0;
+public class GameFragment3 extends Fragment {
 
-    private ImageView m_up, m_down, m_left, m_right, m_repeat, m_way, m_dingco, m_alphabet;
+    private final static int GAME_STARTED = 1,
+            GAME_FINISHED = 1,
+            GAME_NOT_FINISHED = 2;
+
+    private ImageView m_up, m_down, m_left, m_right, m_repeat, m_get, m_way, m_dingco, m_alphabet;
     private Button m_back, m_clear, m_run;
     private EditText m_repeatNum;
     private Toast m_toast;
@@ -101,7 +104,6 @@ public class GameFragment extends Fragment {
        : 코딩 작업창에 있는 반복 블록의 반복 수들을 저장함
      */
     private Queue<Integer> m_queueForRepeatNum = new ArrayDeque<>();
-    private Queue<Arrow> m_queueToArduino = new ArrayDeque<>();
     private String m_voca;// 영단어
     private int m_mapInfo = 0,// 맵 정보
             m_firstR,// 캐릭터 최초 Row 위치
@@ -123,20 +125,23 @@ public class GameFragment extends Fragment {
     private IFragmentListener mFragmentListener = null;
     private Arrow m_prevArrow;
 
-    public GameFragment(Context c, IFragmentListener l) {
+    private MainActivity m_ma;
+
+    public GameFragment3(Context c, IFragmentListener l) {
         mContext = c;
         mFragmentListener = l;
+        m_ma = (MainActivity) mContext;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         AppSettings.initializeAppSettings(mContext);
 
-        mRootView = inflater.inflate(R.layout.activity_view, container, false);
+        mRootView = inflater.inflate(R.layout.activity_upgrade, container, false);
 
         Random randomGenerator = new Random();
-        m_voca = BasicVoca.valueOf(randomGenerator.nextInt(BasicVoca.sizeOf())).toString();
-        m_mapInfo = 3;
+        m_voca = Sentence.valueOf(randomGenerator.nextInt(Sentence.sizeOf())).toString();
+        m_mapInfo = 5;
 
         // 위젯 모음
         m_up = (ImageView) mRootView.findViewById(R.id.up);
@@ -144,6 +149,7 @@ public class GameFragment extends Fragment {
         m_left = (ImageView) mRootView.findViewById(R.id.left);
         m_right = (ImageView) mRootView.findViewById(R.id.right);
         m_repeat = (ImageView) mRootView.findViewById(R.id.repeat);
+        m_get = (ImageView) mRootView.findViewById(R.id.get);
         m_way = (ImageView) mRootView.findViewById(R.id.shortest_way);
         m_alphabet = (ImageView) mRootView.findViewById(R.id.alphabet);
         m_alphabet.setVisibility(View.GONE);
@@ -169,6 +175,7 @@ public class GameFragment extends Fragment {
         m_down.setOnTouchListener(touchListener);
         m_left.setOnTouchListener(touchListener);
         m_right.setOnTouchListener(touchListener);
+        m_get.setOnTouchListener(touchListener);
         m_way.setOnTouchListener(touchListener);
         m_back.setOnClickListener(clickListener);
         m_clear.setOnClickListener(clickListener);
@@ -195,16 +202,18 @@ public class GameFragment extends Fragment {
             public void onClick(View v) {
                 TransitionManager.beginDelayedTransition(transitionsContainer);
                 visible = !visible;
-                m_repeatNum.setVisibility(visible ? View.VISIBLE : View.GONE);
+                m_repeatNum.setVisibility(visible ? View.VISIBLE : GONE);
             }
         });
 
         // 게임 정보 초기화
-        init(CLEAR_BTN_NOT_CLICKED);
+        init(GAME_STARTED);
         // 알파벳 맵 생성
         generateMap();
         // 캐릭터 생성
         setDingcoStartPos();
+
+        m_way.setVisibility(GONE);
 
         return mRootView;
     }
@@ -212,36 +221,15 @@ public class GameFragment extends Fragment {
     /*
        게임에 셋팅에 필요한 데이터를 초기화한다.
     */
-    private void init(int isClear) {
-        switch (isClear) {
-            // CLEAR_BTN_NOT_CLICKED일 경우 캐릭터 최초 위치를 랜덤으로 받는다.
-            case CLEAR_BTN_NOT_CLICKED: {
-                int loc;
-                Random randomGenerator = new Random();
-                loc = randomGenerator.nextInt(m_mapInfo) + 1;
-                m_currR = loc;
-                m_firstR = m_currR;
-                loc = randomGenerator.nextInt(m_mapInfo) + 1;
-                m_currC = loc;
-                m_firstC = m_currC;
-                break;
-            }
-            // CLEAR_BTN_CLICKED일 경우 캐릭터 위치를 처음으로 되돌린다.
-            case CLEAR_BTN_CLICKED: {
-                m_currR = m_firstR;
-                m_currC = m_firstC;
-                break;
-            }
-        }
-
-        // 영단어 정답 알파벳 개수 초기화
-        m_correctAlphaCnt = 0;
+    private void init(int GAME_STATE) {
+        // 게임이 시작하거나 끝났을 경우 영단어 정답 알파벳 개수 초기화
+        if (GAME_STATE == 1)
+            m_correctAlphaCnt = 0;
 
         // 자료구조 데이터 초기화
         m_stackForCodingStation.clear();
         m_codingStation.setAdapter(m_codingStationAdapter);
         m_queueForCodingBlock.clear();
-        m_queueForAnswers.clear();
         m_queueForRepeatNum.clear();
     }
 
@@ -249,118 +237,60 @@ public class GameFragment extends Fragment {
        알파벳 맵을 생성한다..
     */
     private void generateMap() {
-        m_alphabatsMap = getAlphaMap(getAlphaQueue());
+        m_alphabatsMap = getAlphaMap(getAlphaList());
         deleteMap();
         displayMap();
     }
 
     /*
-       알파벳들을 저장한 큐를 반환한다.
+        알파벳들을 저장한 큐를 반환한다.
     */
-    private ArrayDeque<Character> getAlphaQueue() {
-        int vocaMaxLength = m_mapInfo * m_mapInfo - 1;
+    private ArrayList<Character> getAlphaList() {
+        int vocaMaxLength = m_mapInfo * m_mapInfo;
         char alphas[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
                 'u', 'v', 'w', 'x', 'y', 'z'};
         Random randomGenerator = new Random();
-        ArrayDeque<Character> queue = new ArrayDeque<>();
+        ArrayList<Character> arrayList = new ArrayList<>();
 
-        for (int i = 0; i < vocaMaxLength; i++) {
+        for (int i = 0; i < vocaMaxLength - 1; i++) {
             // 큐에 영단어 알파벳 저장
             if (i < m_voca.length())
-                queue.add(m_voca.charAt(i));
+                arrayList.add(m_voca.charAt(i));
             else {
                 char rc = alphas[randomGenerator.nextInt(alphas.length)];
-
                 // 영단어가 가지고 있는 알파벳이 포함되지 않을 때 까지 반복
-                while (queue.contains(rc)) {
+                while (arrayList.contains(rc)) {
                     rc = alphas[randomGenerator.nextInt(alphas.length)];
                 }
-
                 // 포함된 알파벳이 아니라면 큐에 저장
-                queue.add(rc);
+                arrayList.add(rc);
             }
         }
-        return queue;
+        // 시작 지점
+        arrayList.add(' ');
+        return arrayList;
     }
 
     /*
        알파벳들을 저장한 큐 가져와 만든 알파벳 맵을 반환한다.
     */
-    private char[][] getAlphaMap(ArrayDeque<Character> queue) {
-        int currR = m_currR, currC = m_currC, vocaMaxLength = m_mapInfo * m_mapInfo - 1;
+    private char[][] getAlphaMap(ArrayList<Character> arrayList) {
+        int i, j;
+        Random randomGenerator = new Random();
         char alphabatsMap[][] = new char[m_mapInfo + 2][m_mapInfo + 2];
-        boolean isVisited[][] = new boolean[m_mapInfo + 2][m_mapInfo + 2];
-        for (int i = 1; i < m_mapInfo + 1; i++) {
-            for (int j = 1; j < m_mapInfo + 1; j++) {
-                isVisited[i][j] = true;
-            }
-        }
-        alphabatsMap[currR][currC] = ' ';
-        isVisited[currR][currC] = false;
-        boolean flag = false;
-        Stack<Point> stack = new Stack<>();
-        ArrayList<Point> arrayList = new ArrayList<>();
-
-        // (1) 큐에 있는 알파벳이 모두 사라질 때까지 반복
-        while (queue.size() > 0) {
-            Random randomGenerator = new Random();
-            Arrow arrow;
-            int nextR, nextC;
-
-            // (2) 현재 위치에서 방문 가능한 곳을 저장
-            flag = false;
-            for (int i = 0; i < 4; i++) {
-                // 위, 아래, 왼쪽, 오른쪽
-                arrow = Arrow.valueOf(i);
-                nextR = currR + arrow.getRow();
-                nextC = currC + arrow.getCol();
-                if (isVisited[nextR][nextC]) {
-                    flag = true;
-                    arrayList.add(new Point(arrow.getRow(), arrow.getCol()));
-                }
-            }
-
-            if (flag) {
-                // (3) 방문 가능한 곳 중 한 곳을 랜덤으로 입력 받음
-                Point point = arrayList.get(randomGenerator.nextInt(arrayList.size()));
-                nextR = currR + point.getRow();
-                nextC = currC + point.getCol();
-
-                alphabatsMap[nextR][nextC] = queue.poll();
-                isVisited[nextR][nextC] = false;
-                stack.add(new Point(nextR, nextC));
-                currR = nextR;
-                currC = nextC;
-
-                arrayList.clear();
-            }
-
-            // (4) 길이 막혔을 때
-            else {
-                // (5) 주어진 단어의 알파벳이 모두 채워지지 않았으면, 맵 재배치
-                if (queue.size() > (vocaMaxLength - m_voca.length())) {
-                    stack.clear();
-                    queue = getAlphaQueue();
-                    for (int i = 1; i < m_mapInfo + 1; i++) {
-                        for (int j = 1; j < m_mapInfo + 1; j++) {
-                            isVisited[i][j] = true;
-                        }
-                    }
-                    currR = m_currR;
-                    currC = m_currC;
-                    alphabatsMap[currR][currC] = ' ';
-                    isVisited[currR][currC] = false;
-                }
-                // (6) 주어진 단어의 알파벳이 모두 채워졌으면, 이전 위치로 이동
-                else {
-                    Point p = stack.pop();
-                    currR = p.getRow();
-                    currC = p.getCol();
+        for (i = 1; i < m_mapInfo + 1; i++) {
+            for (j = 1; j < m_mapInfo + 1; j++) {
+                int index = randomGenerator.nextInt(arrayList.size());
+                alphabatsMap[i][j] = arrayList.get(index);
+                arrayList.remove(index);
+                if (alphabatsMap[i][j] == ' ') {
+                    // 캐릭터 시작 지점
+                    m_firstR = m_currR = i;
+                    m_firstC = m_currC = j;
                 }
             }
         }
-
         return alphabatsMap;
     }
 
@@ -417,7 +347,7 @@ public class GameFragment extends Fragment {
         m_dingcoContainer.removeAllViews();
         switch (m_mapInfo) {
             case 3: {
-                m_dingco.setImageResource(R.drawable.genie_change_apple_s);
+                m_dingco.setImageResource(R.drawable.genie_change_choco_s);
                 m_moveToMarginLeft = 234;
                 m_moveToMarginTop = 114;
                 m_firstMarginLeft = 117 + (m_moveToMarginLeft * (m_firstC - 1));
@@ -425,7 +355,7 @@ public class GameFragment extends Fragment {
                 break;
             }
             case 4: {
-                m_dingco.setImageResource(R.drawable.genie_change_berry_s);
+                m_dingco.setImageResource(R.drawable.genie_change_kiwi_s);
                 m_moveToMarginLeft = 177;
                 m_moveToMarginTop = 114;
                 m_firstMarginLeft = 88 + (m_moveToMarginLeft * (m_firstC - 1));
@@ -461,7 +391,6 @@ public class GameFragment extends Fragment {
             View.DragShadowBuilder myShadowBuilder = new View.DragShadowBuilder(v);
             v.startDrag(data, myShadowBuilder, v, 0);
             return true;
-
         }
     };
 
@@ -521,6 +450,17 @@ public class GameFragment extends Fragment {
                                 setToastMessage("블록을 다시 넣어주세요.");
                             }
                             break;
+                        case R.id.get:
+                            // 뷰 인플레트 예외처리
+                            try {
+                                m_queueForCodingBlock.add(Arrow.valueOf("get"));
+                                m_stackForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.get)));
+                                m_codingStation.setAdapter(m_codingStationAdapter);
+                                m_repeatAvailable = true;
+                            } catch (Exception e) {
+                                setToastMessage("블록을 다시 넣어주세요.");
+                            }
+                            break;
                         case R.id.shortest_way :
                             findShortestWay();
                             break;
@@ -571,183 +511,82 @@ public class GameFragment extends Fragment {
                             m_queueForRepeatNum.poll();
                         }
                     } else {
-                        if (!m_queueForAnswers.isEmpty()) {
-                            if (m_backAvailable) {
-                                m_backAvailable = false;
-                                Arrow arrow = m_queueForAnswers.pollLast();
-                                m_currR -= arrow.getRow();
-                                m_currC -= arrow.getCol();
-                                m_correctAlphaCnt--;
-                                m_stackForCodingStation.pop();
-                                m_codingStation.setAdapter(m_codingStationAdapter);
-                                new MovingBackTask(GameFragment.this).execute(arrow);
-                            }
-                        } else {
-                            setToastMessage("되돌릴 코딩 블록이 없어요.");
-                        }
+                        setToastMessage("되돌릴 코딩 블록이 없어요.");
                     }
                     break;
                 }
                 case R.id.clear: {
-                    init(CLEAR_BTN_CLICKED);
-                    setDingcoStartPos();
+                    init(GAME_NOT_FINISHED);
                     setToastMessage("모든 블록을 지웠어요.");
                     m_alphabet.setVisibility(View.GONE);
                     break;
                 }
                 case R.id.run: {
-                    // 입력된 코딩 블록이 없다면
+                    int repeatNum = 1;
+                    boolean isRepeat = false;
                     if (m_queueForCodingBlock.isEmpty()) {
                         setToastMessage("블록을 넣어주세요.");
-
-                        // 입력된 코딩블록이 있다면
                     } else {
-                        // run 버튼 클릭 시, clear와 back 버튼을 통해 AsyncTask 인스턴스가 겹치는 것을 방지함
-                        m_back.setBackgroundColor(Color.parseColor("#707B7C"));
-                        m_clear.setBackgroundColor(Color.parseColor("#707B7C"));
-                        m_back.setEnabled(false);
-                        m_clear.setEnabled(false);
-                        // 마지막에 반복 블록이 입력되고 run 버튼을 클릭하여 반복 수가 그대로 남는 것을 방지함
-                        int repeatNum = 1;
-                        int correctRepeatCnt = 0;
-                        boolean isRepeat = false, isFailed = false;
-
-                        // (1) 큐에 입력된 코딩 블록의 수 만큼 반복
                         while (m_queueForCodingBlock.size() > 0) {
                             Arrow arrow = m_queueForCodingBlock.poll();
 
-                            // (2) 코딩블록이 repeat일 경우
-                            if (arrow.toString().equals("repeat")) {
+                            // 코딩 블록이 "줍기"면
+                            if (arrow.toString().equals("get")) {
 
-                                // 바운드를 넘어서 repeat 블록이 들어와서 맞았을 경우 예외처리
-                                if (m_correctAlphaCnt == m_voca.length()) {
-                                    setToastMessage("다시 시도해봐요.");
-                                    wrongMsgToArduino();
+                                // 정답 알파벳을 다 맞춘 이후에도 줍기를 수행하면 오류가 나는 예외 처리
+                                try {
+                                    if (m_alphabatsMap[m_currR][m_currC] == m_voca.charAt(m_correctAlphaCnt)) {
+                                        m_correctAlphaCnt++;
+                                        try {
+                                            setToastMessage("정답이에요! 다음 알파벳은 " + m_voca.charAt(m_correctAlphaCnt) + " 에요.");
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        setToastMessage("틀렸어요! 알파벳 " + m_voca.charAt(m_correctAlphaCnt) + "을 찾아봐요.");
+                                        wrongMsgToArduino();
+                                    }
+                                } catch (Exception e) {
                                     m_correctAlphaCnt--;
-                                    Arrow temp = m_queueForAnswers.pollLast();
-                                    m_currR -= temp.getRow();
-                                    m_currC -= temp.getCol();
-                                    m_queueForMovingTask.pollLast();
+                                    setToastMessage("너무 많아요! 알파벳 " + m_voca.charAt(m_correctAlphaCnt) + "만 찾아봐요.");
+                                    wrongMsgToArduino();
+                                    e.printStackTrace();
                                 }
-                                isRepeat = true;
-                                repeatNum = m_queueForRepeatNum.poll();
+                            }
 
-                                // (3) 코딩블록이 repeat이 아닐 경우
-                            } else {
-                                for (int i = 0; i < repeatNum; i++) {
+                            // 코딩 블록이 "줍기"가 아니면
+                            else {
 
-                                    // (4) 캐릭터 좌표 이동
-                                    m_currR += arrow.getRow();
-                                    m_currC += arrow.getCol();
+                                // 코딩 블록이 "반복"이면
+                                if (arrow.toString().equals("repeat")) {
+                                    isRepeat = true;
+                                    repeatNum = m_queueForRepeatNum.poll();
 
-                                    // 아웃오브인덱스 예외처리
-                                    try {
-                                        // (5-1) 캐릭터가 이동한 자리에 있는 알파벳이 영단어에 포함되지 않는다면
-                                        if (m_alphabatsMap[m_currR][m_currC] != m_voca.charAt(m_correctAlphaCnt)) {
-                                            setToastMessage("다시 시도해봐요.");
-                                            wrongMsgToArduino();
-                                            isFailed = true;
-
-                                            // (5-2) 이전 좌표로 캐릭터 이동
-                                            m_currR -= arrow.getRow();
-                                            m_currC -= arrow.getCol();
-
-                                            // (5-3) 정답이 아닌 코딩 블록 이후 큐(코딩블록) 비우기
-                                            while (!m_queueForCodingBlock.isEmpty()) {
-                                                m_queueForCodingBlock.poll();
-                                            }
-                                            // (5-4) 정답이 아닌 코딩 블록 이후 큐(반복수) 비우기
-                                            while (!m_queueForRepeatNum.isEmpty()) {
-                                                m_queueForRepeatNum.poll();
-                                            }
-                                            // (6) 캐릭터가 이동한 자리에 있는 알파벳이 영단어에 포함된다면
-                                        } else {
-                                            m_queueForAnswers.addLast(arrow);
-                                            m_correctAlphaCnt++;
-                                            correctRepeatCnt++;
-                                        }
-                                    } catch (Exception e) {
-                                        // 반복 시, 아웃오브인덱스 예외처리
-                                        for (int j = 0; j < correctRepeatCnt; j++) {
-                                            m_currR -= arrow.getRow();
-                                            m_currC -= arrow.getCol();
-                                            m_correctAlphaCnt--;
-                                            m_queueForAnswers.pollLast();
-                                        }
-                                        // 예외가 발생한 지점을 추가하기 때문에 한번 더 빼줘야 함
-                                        m_currR -= arrow.getRow();
-                                        m_currC -= arrow.getCol();
-                                        setToastMessage("다시 시도해봐요.");
-                                        wrongMsgToArduino();
-                                        isFailed = true;
-                                        correctRepeatCnt = 0;
-                                        // 정답이 아닌 코딩 블록 이후 큐(코딩블록) 비우기
-                                        while (!m_queueForCodingBlock.isEmpty()) {
-                                            m_queueForCodingBlock.poll();
-                                        }
-                                        // 정답이 아닌 코딩 블록 이후 큐(리핏넘) 비우기
-                                        while (!m_queueForRepeatNum.isEmpty()) {
-                                            m_queueForRepeatNum.poll();
-                                        }
-                                        // 반복이 아닌데 바운드를 넘어서 틀린 경우 예외처리
-                                        if (!isRepeat) {
-                                            setToastMessage("다시 시도해봐요.");
-                                            wrongMsgToArduino();
-                                            m_correctAlphaCnt--;
-                                            Arrow temp = m_queueForAnswers.pollLast();
-                                            m_currR -= temp.getRow();
-                                            m_currC -= temp.getCol();
-                                            m_queueForMovingTask.pollLast();
-                                        }
-                                        break;
-                                    }
-                                }
-                                // (7) 반복 중에 알파벳이 틀렸을 경우
-                                if (isRepeat && isFailed) {
-                                    // 반복O, 실패0 반복 중에 맞은 개수 만큼 캐릭터 이동
-                                    for (int i = 0; i < correctRepeatCnt; i++) {
-                                        m_currR -= arrow.getRow();
-                                        m_currC -= arrow.getCol();
-                                        m_correctAlphaCnt--;
-                                        m_queueForAnswers.pollLast();
-                                        setToastMessage("다시 시도해봐요.");
-                                        wrongMsgToArduino();
-                                    }
-                                    // (8) 반복X, 실패X 캐릭터 이동
-                                } else if (!isRepeat && !isFailed) {
-                                    m_queueForMovingTask.add(arrow);
-                                    // (9) 반복O, 실패X 반복 수 만큼 캐릭터 이동
-                                } else if (isRepeat && !isFailed) {
+                                    // 코딩 블록이 repeat이 아닐 경우
+                                } else {
                                     for (int i = 0; i < repeatNum; i++) {
-                                        m_queueForMovingTask.add(arrow);
+                                        // 캐릭터 좌표 이동
+                                        int nextR = m_currR + arrow.getRow();
+                                        int nextC = m_currC + arrow.getCol();
+                                        if (nextR < 1 || nextC < 1 || nextR > m_mapInfo || nextC > m_mapInfo) {
+                                            setToastMessage("더 이상 갈 수 없어요.");
+                                            wrongMsgToArduino();
+                                        } else {
+                                            m_currR += arrow.getRow();
+                                            m_currC += arrow.getCol();
+                                            m_queueForMovingTask.add(arrow);
+                                        }
                                     }
+                                    repeatNum = 1;
                                 }
-                                // (10) 값 초기화
-                                repeatNum = 1;
-                                isRepeat = false;
-                                correctRepeatCnt = 0;
-                                isFailed = false;
                             }
                         }
-                        m_queueToArduino = m_queueForMovingTask.clone();
-                        // (11) UI 작업
-                        new MovingTask(GameFragment.this).execute(new MovingTaskParams(m_queueForMovingTask, m_queueForMovingTask.size()));
-                        wayMsgToArduino();
+                        new MovingTask3(GameFragment3.this).execute(new MovingTaskParams(m_queueForMovingTask, m_queueForMovingTask.size()));
                     }
-
-                    // 영어단어를 맞췄을 경우
+                    // 알파벳을 모두 맞추었으면
                     if (m_correctAlphaCnt == m_voca.length()) {
                         // MovingTask 클래스한테 게임 종료를 알림
                         m_isFinished = true;
-                    }
-
-                    // 정답인 코딩 블록만 코딩 작업창에 남기기
-                    m_stackForCodingStation.clear();
-                    m_codingStation.setAdapter(m_codingStationAdapter);
-                    ArrayDeque<Arrow> queue = m_queueForAnswers.clone();
-                    while (!queue.isEmpty()) {
-                        m_stackForCodingStation.add(new GridViewItem(getResources().getDrawable(queue.pollFirst().getDrawable())));
-                        m_codingStation.setAdapter(m_codingStationAdapter);
                     }
                     break;
                 }
@@ -770,10 +609,6 @@ public class GameFragment extends Fragment {
 
     public int getMoveToMarginTop() {
         return m_moveToMarginTop;
-    }
-
-    public void setBackState(boolean back) {
-        m_backAvailable = back;
     }
 
     public boolean getIsFinished() {
@@ -817,60 +652,13 @@ public class GameFragment extends Fragment {
             }
         }
         // (2) 게임 정보 초기화
-        init(CLEAR_BTN_NOT_CLICKED);
+        init(GAME_FINISHED);
         // (3) 맵 생성
         generateMap();
         // (4) 캐릭터 생성
         setDingcoStartPos();
-        // (5) 알파벳 현황 제거
+        //
         m_alphabet.setVisibility(View.GONE);
-    }
-
-    // Sends user message to remote
-    public void sendMessage(String message) {
-        if (message == null || message.length() < 1)
-            return;
-        // send to remote
-        if (mFragmentListener != null)
-            mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_SEND_MESSAGE, 0, 0, message, null, null);
-        else
-            return;
-    }
-
-    private void wrongMsgToArduino() {
-        sendMessage("끄기\n빨강\n경적");
-    }
-
-    public void correctMsgToArduino() {
-        sendMessage("끄기\n초록\n정답");
-    }
-
-    public void wayMsgToArduino() {
-        String message = "";
-        while(m_queueToArduino.size() > 0) {
-            Arrow arrow = m_queueToArduino.poll();
-            switch(arrow) {
-                case up : {
-                    message += "앞\n";
-                    break;
-                }
-                case down : {
-                    message += "뒤\n";
-                    break;
-                }
-                case left : {
-                    message += "왼쪽\n";
-                    break;
-                }
-                case right : {
-                    message += "오른쪽\n";
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-        sendMessage(message);
     }
 
     private void findShortestWay() {
@@ -887,6 +675,11 @@ public class GameFragment extends Fragment {
                     try {
                         if (m_alphabatsMap[i][j] == m_voca.charAt(correctAlphaCnt)) {
                             int diff;
+                            if (currR == i && currC == j) {
+                                m_stackForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.get)));
+                                m_codingStation.setAdapter(m_codingStationAdapter);
+                                m_queueForCodingBlock.add(Arrow.valueOf("get"));
+                            }
                             // 캐릭터의 위치가 알파벳 보다 아래에 있다.
                             if (currR > i) {
                                 // 차이만큼 위로
@@ -926,6 +719,9 @@ public class GameFragment extends Fragment {
                                     m_queueForCodingBlock.add(Arrow.valueOf("right"));
                                 }
                             }
+                            m_stackForCodingStation.add(new GridViewItem(getResources().getDrawable(R.drawable.get)));
+                            m_queueForCodingBlock.add(Arrow.valueOf("get"));
+                            m_codingStation.setAdapter(m_codingStationAdapter);
                             correctAlphaCnt++;
                             currR = i;
                             currC = j;
@@ -937,6 +733,26 @@ public class GameFragment extends Fragment {
             }
         }
     }
+
+    // Sends user message to remote
+    public void sendMessage(String message) {
+        if (message == null || message.length() < 1)
+            return;
+        // send to remote
+        if (mFragmentListener != null)
+            mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_SEND_MESSAGE, 0, 0, message, null, null);
+        else
+            return;
+    }
+
+    private void wrongMsgToArduino() {
+        sendMessage("끄기\n빨강\n경적");
+    }
+
+    public void correctMsgToArduino() {
+        sendMessage("끄기\n초록\n정답");
+    }
+
 
     public char getCurrAlpha() {
         return  m_voca.charAt(m_correctAlphaCnt-1);

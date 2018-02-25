@@ -9,12 +9,12 @@ import android.util.Log;
 import com.wjthinkbig.a10010952.codinggame.Arrow;
 import com.wjthinkbig.a10010952.codinggame.MovingTaskParams;
 
-public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
+public class MovingTask2 extends AsyncTask<MovingTaskParams, Integer, Boolean> {
 
-    private GameFragment m_gf;
+    private GameFragment2 m_gf;
     private boolean flag = false;
 
-    public MovingTask(GameFragment gf) {
+    public MovingTask2(GameFragment2 gf) {
         m_gf = gf;
     }
 
@@ -123,7 +123,7 @@ public class MovingTask extends AsyncTask<MovingTaskParams, Integer, Boolean> {
             m_gf.resetGame();
             // 정답을 맞췄는지 아닌지에 대한 플래그 초기화
             m_gf.setIsFinished(false);
-            // 아두이노로 정답 메시지 전달
+            // 아두이노에 정답 메시지 전달
             m_gf.correctMsgToArduino();
         }
         m_gf.getBackBtn().setBackgroundColor(Color.parseColor("#424242"));

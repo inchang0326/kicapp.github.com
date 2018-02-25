@@ -12,17 +12,6 @@ public enum BasicVoca {
             return "파란색";
         }
     },
-    green {
-        @Override
-        public String toString() {
-            return "green";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "초록색";
-        }
-    },
     red {
         @Override
         public String toString() {
@@ -32,17 +21,6 @@ public enum BasicVoca {
         @Override
         public String meaningOf() {
             return "빨간색";
-        }
-    },
-    yellow {
-        @Override
-        public String toString() {
-            return "yellow";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "노란색";
         }
     },
     black {
@@ -67,39 +45,6 @@ public enum BasicVoca {
             return "생각하다";
         }
     },
-    apple {
-        @Override
-        public String toString() {
-            return "apple";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "사과";
-        }
-    },
-    kiwi {
-        @Override
-        public String toString() {
-            return "kiwi";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "키위";
-        }
-    },
-    cherry {
-        @Override
-        public String toString() {
-            return "cherry";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "체리";
-        }
-    },
     love {
         @Override
         public String toString() {
@@ -121,17 +66,6 @@ public enum BasicVoca {
         @Override
         public String meaningOf() {
             return "구름";
-        }
-    },
-    tree {
-        @Override
-        public String toString() {
-            return "tree";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "나무";
         }
     },
     sun {

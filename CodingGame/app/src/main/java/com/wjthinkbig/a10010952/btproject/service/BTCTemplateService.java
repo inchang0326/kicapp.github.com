@@ -62,8 +62,6 @@ public class BTCTemplateService extends Service {
 	private Timer mRefreshTimer = null;
 	private Timer mDeleteTimer = null;
     
-	private boolean m_chkConnected = false;
-
 	/*****************************************************
 	 *	Overrided methods
 	 ******************************************************/
@@ -99,8 +97,6 @@ public class BTCTemplateService extends Service {
 	@Override
 	public boolean onUnbind(Intent intent) {
 		Logs.d(TAG, "# Service - onUnbind()");
-		m_chkConnected = false;
-		mBluetoothAdapter.disable();
 		return true;
 	}
 	
@@ -108,7 +104,6 @@ public class BTCTemplateService extends Service {
 	public void onDestroy() {
 		Logs.d(TAG, "# Service - onDestroy()");
 		finalizeService();
-		m_chkConnected = false;
 	}
 	
 	@Override
@@ -402,7 +397,6 @@ public class BTCTemplateService extends Service {
 
 					Toast.makeText(getApplicationContext(),
 							"Connected to " + deviceName, Toast.LENGTH_SHORT).show();
-					m_chkConnected = true;
 				}
 				break;
 				
@@ -419,8 +413,4 @@ public class BTCTemplateService extends Service {
 			super.handleMessage(msg);
 		}
 	}	// End of class MainHandler
-
-	public boolean getConnectedState() {
-		return m_chkConnected;
-	}
 }

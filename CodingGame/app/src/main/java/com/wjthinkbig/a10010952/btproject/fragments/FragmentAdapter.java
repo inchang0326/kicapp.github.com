@@ -31,14 +31,18 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class FragmentAdapter extends FragmentPagerAdapter {
 
-	public static final String TAG = "FragmentAdapter";
+    public static final String TAG = "FragmentAdapter";
 
-	// TODO: Total count
-	public static final int FRAGMENT_COUNT = 2;
+    // TODO: Total count
+    public static final int FRAGMENT_COUNT = 6;
 
     // TODO: Fragment position
-    public static final int FRAGMENT_POS_EXAMPLE = 1;
-    public static final int FRAGMENT_POS_CONTROL = 0;
+    public static final int FRAGMENT_POS_CONTROL = 0;   //기본_짧은 영단어
+    public static final int FRAGMENT_POS_CONTROL2 = 1;  //기본_긴 영단어
+    public static final int FRAGMENT_POS_CONTROL4 = 2;  //심화_짧은 영단어
+    public static final int FRAGMENT_POS_CONTROL5 = 3;  //심화_긴 영단어
+    public static final int FRAGMENT_POS_CONTROL3 = 4;  //심화_영어문장
+    public static final int FRAGMENT_POS_EXAMPLE = 5;   //자유코딩
 
     // System
     private Context mContext = null;
@@ -46,41 +50,73 @@ public class FragmentAdapter extends FragmentPagerAdapter {
     private IFragmentListener mFragmentListener = null;
 
     private Fragment mExampleFragment = null;
-    private Fragment mLLSettingsFragment = null;
+    private Fragment mGameFragment = null;
+    private Fragment mGameFragment2 = null;
+    private Fragment mGameFragment3 = null;
+    private Fragment mGameFragment4 = null;
+    private Fragment mGameFragment5 = null;
 
     public FragmentAdapter(FragmentManager fm, Context c, IFragmentListener l, Handler h) {
-		super(fm);
-		mContext = c;
-		mFragmentListener = l;
-		mHandler = h;
-	}
+        super(fm);
+        mContext = c;
+        mFragmentListener = l;
+        mHandler = h;
+    }
 
-	@Override
-	public Fragment getItem(int position) {
-		// getItem is called to instantiate the fragment for the given page.
-		Fragment fragment;
-		//boolean needToSetArguments = false;
+    @Override
+    public Fragment getItem(int position) {
+        // getItem is called to instantiate the fragment for the given page.
+        Fragment fragment;
+        //boolean needToSetArguments = false;
 
-		if(position == FRAGMENT_POS_EXAMPLE) {
-			if(mExampleFragment == null) {
-				mExampleFragment = new ExampleFragment(mContext, mFragmentListener, mHandler);
-				//needToSetArguments = true;
-			}
-			fragment = mExampleFragment;
+        if (position == FRAGMENT_POS_EXAMPLE) {
+            if (mExampleFragment == null) {
+                mExampleFragment = new ExampleFragment(mContext, mFragmentListener, mHandler);
+                //needToSetArguments = true;
+            }
+            fragment = mExampleFragment;
 
-		} else if(position == FRAGMENT_POS_CONTROL) {
-			if(mLLSettingsFragment == null) {
-				mLLSettingsFragment = new GameFragment(mContext, mFragmentListener);
-				//needToSetArguments = true;
-			}
-			fragment = mLLSettingsFragment;
+        } else if (position == FRAGMENT_POS_CONTROL) {
+            if (mGameFragment == null) {
+                mGameFragment = new GameFragment(mContext, mFragmentListener);
+                //needToSetArguments = true;
+            }
+            fragment = mGameFragment;
 
-		} else {
-			fragment = null;
-		}
+        } else if (position == FRAGMENT_POS_CONTROL2) {
+            if (mGameFragment2 == null) {
+                mGameFragment2 = new GameFragment2(mContext, mFragmentListener);
+                //needToSetArguments = true;
+            }
+            fragment = mGameFragment2;
 
-		// TODO: If you have something to notify to the fragment.
-		/*
+        } else if (position == FRAGMENT_POS_CONTROL3) {
+            if (mGameFragment3 == null) {
+                mGameFragment3 = new GameFragment3(mContext, mFragmentListener);
+                //needToSetArguments = true;
+            }
+            fragment = mGameFragment3;
+
+        } else if (position == FRAGMENT_POS_CONTROL4) {
+            if (mGameFragment4 == null) {
+                mGameFragment4 = new GameFragment4(mContext, mFragmentListener);
+                //needToSetArguments = true;
+            }
+            fragment = mGameFragment4;
+
+        } else if (position == FRAGMENT_POS_CONTROL5) {
+            if (mGameFragment5 == null) {
+                mGameFragment5 = new GameFragment5(mContext, mFragmentListener);
+                //needToSetArguments = true;
+            }
+            fragment = mGameFragment5;
+
+        } else {
+            fragment = null;
+        }
+
+        // TODO: If you have something to notify to the fragment.
+        /*
 		if(needToSetArguments) {
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, position + 1);
@@ -88,23 +124,38 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 		}
 		*/
 
-		return fragment;
-	}
+        return fragment;
+    }
 
-	@Override
-	public int getCount() {
-		return FRAGMENT_COUNT;
-	}
+    @Override
+    public int getCount() {
+        return FRAGMENT_COUNT;
+    }
 
-	@Override
-	public CharSequence getPageTitle(int position) {
-		Locale l = Locale.getDefault();
-		switch (position) {
-		case FRAGMENT_POS_EXAMPLE:
-			return "자유 코딩";
-		case FRAGMENT_POS_CONTROL:
-			return "코딩 게임";
-		}
-		return null;
-	}
+    @Override
+    public CharSequence getPageTitle(int position) {
+        Locale l = Locale.getDefault();
+        switch (position) {
+            case FRAGMENT_POS_EXAMPLE: {
+                return "문제풀기&자유코딩";
+            }
+            case FRAGMENT_POS_CONTROL: {
+                return "기본_짧은 영단어";
+            }
+            case FRAGMENT_POS_CONTROL2: {
+                return "기본_긴 영단어";
+            }
+            case FRAGMENT_POS_CONTROL3: {
+                return "심화_영어 문장";
+            }
+            case FRAGMENT_POS_CONTROL4: {
+                return "심화_짧은 영단어";
+            }
+            case FRAGMENT_POS_CONTROL5: {
+                return "심화_긴 영단어";
+            }
+        }
+
+        return null;
+    }
 }

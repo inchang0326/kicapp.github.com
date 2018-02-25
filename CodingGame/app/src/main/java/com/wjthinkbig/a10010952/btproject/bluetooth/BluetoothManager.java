@@ -63,8 +63,6 @@ public class BluetoothManager {
 	public static final String SERVICE_HANDLER_MSG_KEY_DEVICE_ADDRESS = "device_address";
 	public static final String SERVICE_HANDLER_MSG_KEY_TOAST = "toast";
     
-    
-    
     // Name for the SDP record when creating server socket
     private static final String NAME = "BluetoothManager";
 
@@ -84,7 +82,6 @@ public class BluetoothManager {
     private long mReconnectDelay = 15*1000;
     private Timer mConnectTimer = null;
     private boolean mIsServiceStopped = false;
-    
 
     /**
      * Constructor. Prepares a new BluetoothChat session.

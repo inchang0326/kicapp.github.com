@@ -1,10 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/action_connect"
+        android:orderInCategory="10"
+        android:showAsAction="always|withText"
+        android:title="블루투스 연결" />
+
+    <item
         android:id="@+id/action_scan"
         android:orderInCategory="10"
-        android:icon="@android:drawable/ic_menu_view"
         android:showAsAction="always|withText"
-        android:title="@string/connect" />
+        android:title="장치 검색" />
 
 </menu>

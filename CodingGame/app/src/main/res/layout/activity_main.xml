@@ -17,6 +17,7 @@
         android:layout_gravity="bottom"
         android:orientation="horizontal"
         style="@style/AppTheme.ConnectionInfoContainer" >
+
         <ImageView
             android:id="@+id/status_title"
             android:layout_width="wrap_content"
@@ -36,5 +37,4 @@
             android:textSize="30dp"
             style="@style/AppTheme.ConnectionInfoText" />
     </LinearLayout>
-    
 </FrameLayout>

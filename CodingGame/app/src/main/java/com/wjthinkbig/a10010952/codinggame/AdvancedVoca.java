@@ -1,39 +1,6 @@
 package com.wjthinkbig.a10010952.codinggame;
 
 public enum AdvancedVoca {
-    breakfast {
-        @Override
-        public String toString() {
-            return "breakfast";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "아침식사";
-        }
-    },
-    classmate {
-        @Override
-        public String toString() {
-            return "classmate";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "반 친구";
-        }
-    },
-    chopstick {
-        @Override
-        public String toString() {
-            return "chopstick";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "젓가락";
-        }
-    },
     computer {
         @Override
         public String toString() {
@@ -54,17 +21,6 @@ public enum AdvancedVoca {
         @Override
         public String meaningOf() {
             return "생일";
-        }
-    },
-    treasure {
-        @Override
-        public String toString() {
-            return "treasure";
-        }
-
-        @Override
-        public String meaningOf() {
-            return "보물";
         }
     };
 

@@ -17,6 +17,7 @@
 package com.wjthinkbig.a10010952.btproject.fragments;
 
 import com.wjthinkbig.a10010952.R;
+import com.wjthinkbig.a10010952.btproject.MainActivity;
 import com.wjthinkbig.a10010952.btproject.utils.AppSettings;
 import com.wjthinkbig.a10010952.codinggame.AdvancedVoca;
 import com.wjthinkbig.a10010952.codinggame.Arrow;
@@ -30,6 +31,7 @@ import com.wjthinkbig.a10010952.codinggame.Sentence;
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.transition.TransitionManager;
@@ -57,7 +59,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Stack;
 
-public class GameFragment extends Fragment {
+public class GameFragment2 extends Fragment {
 
     private final static int CLEAR_BTN_CLICKED = 1,
             CLEAR_BTN_NOT_CLICKED = 0;
@@ -101,7 +103,6 @@ public class GameFragment extends Fragment {
        : 코딩 작업창에 있는 반복 블록의 반복 수들을 저장함
      */
     private Queue<Integer> m_queueForRepeatNum = new ArrayDeque<>();
-    private Queue<Arrow> m_queueToArduino = new ArrayDeque<>();
     private String m_voca;// 영단어
     private int m_mapInfo = 0,// 맵 정보
             m_firstR,// 캐릭터 최초 Row 위치
@@ -123,9 +124,12 @@ public class GameFragment extends Fragment {
     private IFragmentListener mFragmentListener = null;
     private Arrow m_prevArrow;
 
-    public GameFragment(Context c, IFragmentListener l) {
+    private MainActivity m_ma;
+
+    public GameFragment2(Context c, IFragmentListener l) {
         mContext = c;
         mFragmentListener = l;
+        m_ma = (MainActivity) mContext;
     }
 
     @Override
@@ -135,8 +139,8 @@ public class GameFragment extends Fragment {
         mRootView = inflater.inflate(R.layout.activity_view, container, false);
 
         Random randomGenerator = new Random();
-        m_voca = BasicVoca.valueOf(randomGenerator.nextInt(BasicVoca.sizeOf())).toString();
-        m_mapInfo = 3;
+        m_voca = AdvancedVoca.valueOf(randomGenerator.nextInt(AdvancedVoca.sizeOf())).toString();
+        m_mapInfo = 4;
 
         // 위젯 모음
         m_up = (ImageView) mRootView.findViewById(R.id.up);
@@ -580,7 +584,7 @@ public class GameFragment extends Fragment {
                                 m_correctAlphaCnt--;
                                 m_stackForCodingStation.pop();
                                 m_codingStation.setAdapter(m_codingStationAdapter);
-                                new MovingBackTask(GameFragment.this).execute(arrow);
+                                new MovingBackTask2(GameFragment2.this).execute(arrow);
                             }
                         } else {
                             setToastMessage("되돌릴 코딩 블록이 없어요.");
@@ -729,10 +733,9 @@ public class GameFragment extends Fragment {
                                 isFailed = false;
                             }
                         }
-                        m_queueToArduino = m_queueForMovingTask.clone();
+                        Queue<Arrow> queueToArduino = m_queueForMovingTask.clone();
                         // (11) UI 작업
-                        new MovingTask(GameFragment.this).execute(new MovingTaskParams(m_queueForMovingTask, m_queueForMovingTask.size()));
-                        wayMsgToArduino();
+                        new MovingTask2(GameFragment2.this).execute(new MovingTaskParams(m_queueForMovingTask, m_queueForMovingTask.size()));
                     }
 
                     // 영어단어를 맞췄을 경우
@@ -822,7 +825,7 @@ public class GameFragment extends Fragment {
         generateMap();
         // (4) 캐릭터 생성
         setDingcoStartPos();
-        // (5) 알파벳 현황 제거
+        //
         m_alphabet.setVisibility(View.GONE);
     }
 
@@ -844,35 +847,6 @@ public class GameFragment extends Fragment {
     public void correctMsgToArduino() {
         sendMessage("끄기\n초록\n정답");
     }
-
-    public void wayMsgToArduino() {
-        String message = "";
-        while(m_queueToArduino.size() > 0) {
-            Arrow arrow = m_queueToArduino.poll();
-            switch(arrow) {
-                case up : {
-                    message += "앞\n";
-                    break;
-                }
-                case down : {
-                    message += "뒤\n";
-                    break;
-                }
-                case left : {
-                    message += "왼쪽\n";
-                    break;
-                }
-                case right : {
-                    message += "오른쪽\n";
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-        sendMessage(message);
-    }
-
     private void findShortestWay() {
         int correctAlphaCnt = m_correctAlphaCnt;
         int currR = m_currR;
